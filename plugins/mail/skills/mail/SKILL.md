@@ -65,8 +65,10 @@ Flow:
 1. Transform user's prompt (strip card-related words, append style suffix)
 2. Generate via `npx awal@latest x402 pay 'https://fal.x402.paysponge.com/fal-ai/recraft-v3' -X POST -d '<json>' --json`
 3. Poll `response_url` with `curl` until image URL is returned
-4. Download image, convert to 2-page postcard PDF (Python + Pillow), base64-encode
-5. Pass to PostalForm
+4. Download image to a local file (e.g. `/tmp/postcard-artwork.webp`) and **show it to the user**
+5. Ask the user to confirm: *"Here's the generated artwork. Want to use this for your postcard, or would you like me to generate a new one?"*
+6. If the user wants a new image → go back to step 1 (re-generate costs another $0.04)
+7. Once approved → convert to 2-page postcard PDF (Python + Pillow), base64-encode, pass to PostalForm
 
 For **postcards**: PostalForm expects a 2-page PDF (page 1 = artwork, page 2 = mailing side). PostalForm fills addresses/indicia automatically — do NOT include addresses in the PDF.
 

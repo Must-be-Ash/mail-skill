@@ -79,11 +79,19 @@ Result includes an `images` array:
 
 If response shows `"status": "IN_QUEUE"` or `"IN_PROGRESS"`, wait 3 seconds and poll again. Typical generation time: ~5-8 seconds.
 
-### Step 3: Download the image
+### Step 3: Download and preview
 
 ```bash
 curl -sL '<image_url>' -o /tmp/postcard-artwork.webp
 ```
+
+**Always show the image to the user before proceeding.** Read the downloaded file so the user can see it inline, then ask:
+
+> *"Here's the generated artwork. Want to use this for your postcard, or would you like me to generate a new one?"*
+
+- If the user approves → continue to Step 4
+- If the user wants changes → go back to Step 1 with an adjusted prompt (costs another $0.04)
+- The user can iterate as many times as they want before committing
 
 ### Step 4: Convert to 2-page postcard PDF
 
