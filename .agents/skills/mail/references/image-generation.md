@@ -12,7 +12,7 @@ The user describes what they want in plain language. The agent MUST transform th
 ### Rules
 
 1. **Always set** `"style":"digital_illustration"` in the request body
-2. **Always append** this suffix to the user's prompt: `, bold black outlines, flat solid color fills, minimal shading, white background, hand-drawn doodle line art style, clean simple minimalistic design, no gradients, no textures, flat illustration`
+2. **Always append** this suffix to the user's prompt: `, marker pen lines, imperfect wobbly hand-drawn sketch, flat color fills, imperfect hand-lettered text, simple minimal doodle, rough edges, no fine detail, no shading, no gradients, no textures, white background, flat illustration`
 3. **Never include** these words in the prompt: `card`, `greeting card`, `postcard`, `mockup`, `print`, `paper`, `envelope`, `frame`, `border`, `photograph`, `photo of`. These cause the model to generate an image OF a physical card instead of the artwork itself.
 4. **Always set** `image_size` based on the postcard size (see ratio mapping below)
 
@@ -23,7 +23,7 @@ User says: "a birthday card with a giraffe saying happy birthday Ash"
 Agent constructs:
 ```json
 {
-  "prompt": "a cute giraffe with text saying Happy Birthday Ash, bold black outlines, flat solid color fills, minimal shading, white background, hand-drawn doodle line art style, clean simple minimalistic design, no gradients, no textures, flat illustration",
+  "prompt": "a cute giraffe with text saying Happy Birthday Ash, marker pen lines, imperfect wobbly hand-drawn sketch, flat color fills, imperfect hand-lettered text, simple minimal doodle, rough edges, no fine detail, no shading, no gradients, no textures, white background, flat illustration",
   "image_size": {"width": 1800, "height": 1200},
   "style": "digital_illustration"
 }
@@ -35,9 +35,9 @@ Notice: "card" was removed, doodle style modifiers were appended, and the user's
 
 | User says | Agent prompt |
 |-----------|-------------|
-| "get well soon card with a panda astronaut for Dan" | "a cute panda wearing a white astronaut suit giving a peace sign wave with bold text saying GET WELL SOON at top and DAN at bottom, small golden stars scattered around, bold black outlines, flat solid color fills, minimal shading, white background, hand-drawn doodle line art style, clean simple minimalistic design, no gradients, no textures, flat illustration" |
-| "thank you with flowers" | "a simple bouquet of colorful flowers with bold text saying Thank You, bold black outlines, flat solid color fills, minimal shading, white background, hand-drawn doodle line art style, clean simple minimalistic design, no gradients, no textures, flat illustration" |
-| "merry christmas with a snowman" | "a cheerful snowman wearing a scarf with bold text saying Merry Christmas, bold black outlines, flat solid color fills, minimal shading, white background, hand-drawn doodle line art style, clean simple minimalistic design, no gradients, no textures, flat illustration" |
+| "get well soon card with a panda astronaut for Dan" | "a panda wearing a white astronaut suit waving with hand-lettered text saying GET WELL SOON at top and DAN at bottom, small stars scattered around, marker pen lines, imperfect wobbly hand-drawn sketch, flat color fills, imperfect hand-lettered text, simple minimal doodle, rough edges, no fine detail, no shading, no gradients, no textures, white background, flat illustration" |
+| "thank you with flowers" | "a simple bouquet of flowers with hand-lettered text saying Thank You, marker pen lines, imperfect wobbly hand-drawn sketch, flat color fills, imperfect hand-lettered text, simple minimal doodle, rough edges, no fine detail, no shading, no gradients, no textures, white background, flat illustration" |
+| "merry christmas with a snowman" | "a simple snowman wearing a scarf with hand-lettered text saying Merry Christmas, marker pen lines, imperfect wobbly hand-drawn sketch, flat color fills, imperfect hand-lettered text, simple minimal doodle, rough edges, no fine detail, no shading, no gradients, no textures, white background, flat illustration" |
 
 ## Postcard size → image ratio mapping
 
