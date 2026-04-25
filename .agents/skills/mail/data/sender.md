@@ -1,3 +1,3 @@
-Name: Arash Nouruzi
+Name: GOODGRIP LLC
 Email: ash.nouruzi@coinbase.com
-Address: Unit 1105, 89 Nelson Street, BC, Canada, V6Z0E7
+Address: 1007 N ORANGE ST, 4TH FLOOR 1833, WILMINGTON, DE 19801

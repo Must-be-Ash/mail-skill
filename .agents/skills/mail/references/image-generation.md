@@ -12,7 +12,7 @@ The user describes what they want in plain language. The agent MUST transform th
 ### Rules
 
 1. **Always set** `"style":"digital_illustration"` in the request body
-2. **Always append** this suffix to the user's prompt: `, flat illustration, detailed shading and soft watercolor textures, warm muted color palette, storybook illustration quality, polished refined artwork`
+2. **Always append** this suffix to the user's prompt: `, bold black outlines, flat solid color fills, minimal shading, white background, hand-drawn doodle line art style, clean simple minimalistic design, no gradients, no textures, flat illustration`
 3. **Never include** these words in the prompt: `card`, `greeting card`, `postcard`, `mockup`, `print`, `paper`, `envelope`, `frame`, `border`, `photograph`, `photo of`. These cause the model to generate an image OF a physical card instead of the artwork itself.
 4. **Always set** `image_size` based on the postcard size (see ratio mapping below)
 
@@ -23,21 +23,21 @@ User says: "a birthday card with a giraffe saying happy birthday Ash"
 Agent constructs:
 ```json
 {
-  "prompt": "a cute giraffe with text saying Happy Birthday Ash, flat illustration, detailed shading and soft watercolor textures, warm muted color palette, storybook illustration quality, polished refined artwork",
+  "prompt": "a cute giraffe with text saying Happy Birthday Ash, bold black outlines, flat solid color fills, minimal shading, white background, hand-drawn doodle line art style, clean simple minimalistic design, no gradients, no textures, flat illustration",
   "image_size": {"width": 1800, "height": 1200},
   "style": "digital_illustration"
 }
 ```
 
-Notice: "card" was removed, "flat illustration" and style modifiers were appended, and the user's intent was preserved.
+Notice: "card" was removed, doodle style modifiers were appended, and the user's intent was preserved.
 
 ### More examples
 
 | User says | Agent prompt |
 |-----------|-------------|
-| "get well soon card with a panda astronaut for Dan" | "a cute panda wearing a white astronaut suit waving happily with text saying Get Well Soon Dan, surrounded by stars and planets, solid light blue background, flat illustration, detailed shading and soft watercolor textures, warm muted color palette, storybook illustration quality, polished refined artwork" |
-| "thank you with flowers" | "a beautiful bouquet of colorful flowers with text saying Thank You, flat illustration, detailed shading and soft watercolor textures, warm muted color palette, storybook illustration quality, polished refined artwork" |
-| "merry christmas with a snowman" | "a cheerful snowman wearing a scarf in a snowy scene with text saying Merry Christmas, flat illustration, detailed shading and soft watercolor textures, warm muted color palette, storybook illustration quality, polished refined artwork" |
+| "get well soon card with a panda astronaut for Dan" | "a cute panda wearing a white astronaut suit giving a peace sign wave with bold text saying GET WELL SOON at top and DAN at bottom, small golden stars scattered around, bold black outlines, flat solid color fills, minimal shading, white background, hand-drawn doodle line art style, clean simple minimalistic design, no gradients, no textures, flat illustration" |
+| "thank you with flowers" | "a simple bouquet of colorful flowers with bold text saying Thank You, bold black outlines, flat solid color fills, minimal shading, white background, hand-drawn doodle line art style, clean simple minimalistic design, no gradients, no textures, flat illustration" |
+| "merry christmas with a snowman" | "a cheerful snowman wearing a scarf with bold text saying Merry Christmas, bold black outlines, flat solid color fills, minimal shading, white background, hand-drawn doodle line art style, clean simple minimalistic design, no gradients, no textures, flat illustration" |
 
 ## Postcard size → image ratio mapping
 
@@ -85,7 +85,11 @@ If response shows `"status": "IN_QUEUE"` or `"IN_PROGRESS"`, wait 3 seconds and 
 curl -sL '<image_url>' -o /tmp/postcard-artwork.webp
 ```
 
-**Always show the image to the user before proceeding.** Read the downloaded file so the user can see it inline, then ask:
+**Always do both of the following before proceeding:**
+1. Run `open /tmp/postcard-artwork.webp` to launch the image in the user's default viewer
+2. Read the downloaded file so the user can also see it inline in the conversation
+
+Then ask:
 
 > *"Here's the generated artwork. Want to use this for your postcard, or would you like me to generate a new one?"*
 
