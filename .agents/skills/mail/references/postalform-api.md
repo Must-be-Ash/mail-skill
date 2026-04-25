@@ -163,10 +163,11 @@ Additional CSV columns become merge-field variables usable in `template_html` or
 
 ## Address rules
 
-- `state`: 2-letter US abbreviation (CA, NY, IL, etc.)
-- `zip`: 5-digit (94102) or ZIP+4 (94102-1234)
+- `state`: 2-letter US abbreviation (CA, NY, IL, etc.) — applies to **recipient** address only
+- `zip`: 5-digit (94102) or ZIP+4 (94102-1234) — applies to **recipient** address only
 - `line2`: optional (apartment, suite, unit)
-- US addresses only — international mail is not supported
+- **Recipient** must be a US address — PostalForm delivers domestically only
+- **Sender/return address** can be any address worldwide — no US format restrictions
 - Do NOT mix Loqate ID and manual address for the same party
 
 ## Response: successful order (202)

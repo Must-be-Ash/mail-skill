@@ -46,7 +46,7 @@ Just say what you want to mail:
 | **PDF upload** | Provide a URL or local file path. |
 | **Auto-generate** | Type your message — PostalForm renders it to a printed letter. |
 | **Address memory** | Sender address saved on first use. Recipient addresses remembered by name. |
-| **US only** | PostalForm supports US addresses only. |
+| **US recipient** | Recipient must be in the US. Sender can be anywhere. |
 
 ## How it works
 

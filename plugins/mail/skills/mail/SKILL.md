@@ -6,7 +6,7 @@ description: >-
   send mail, post a letter, mail a document, send a postcard, mail a PDF, send
   physical mail, or "mail it to [someone]". Supports user-provided PDFs,
   auto-generation from text, and AI image generation for postcards via fal.ai
-  (also paid with x402). US addresses only. Single recipient per send.
+  (also paid with x402). Recipient must be in the US. Single recipient per send.
 ---
 
 ## Prerequisites
@@ -186,10 +186,11 @@ Rules:
 
 ## Constraints
 
-- **US addresses only** — PostalForm does not support international mail. If user asks about international, inform them it's not supported.
+- **Recipient must be in the US** — PostalForm delivers to US addresses only. The sender/return address can be anywhere.
 - **Single recipient per send** — one letter or postcard per invocation.
-- **State codes** — must be 2-letter US abbreviation (e.g., CA, NY, IL).
-- **ZIP codes** — 5-digit or ZIP+4 format.
+- **Recipient state codes** — must be 2-letter US abbreviation (e.g., CA, NY, IL).
+- **Recipient ZIP codes** — 5-digit or ZIP+4 format.
+- **Sender address** — can be any address worldwide. No US format restrictions on the return address.
 - **Postcards** — artwork PDF must not contain address/indicia data; PostalForm fills those automatically.
 - **`buyer_email`** is required — PostalForm sends the payment receipt there.
 
