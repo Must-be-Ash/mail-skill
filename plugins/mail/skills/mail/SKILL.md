@@ -14,8 +14,8 @@ description: >-
 Before any mail operation, verify wallet readiness:
 
 ```bash
-npx awal@latest status    # must show authenticated
-npx awal@latest balance   # need ≥ $1 USDC
+npx awal@latest status              # must show authenticated
+npx awal@latest balance --chain base  # need ≥ $1 USDC on Base
 ```
 
 - Not authenticated → run the `authenticate-wallet` skill
@@ -74,17 +74,17 @@ For **postcards**: PostalForm expects a 2-page PDF (page 1 = artwork, page 2 = m
 
 ### 3. Get recipient
 
-- **List** all memory files matching `mail_recipient_*.md` by reading the memory index (MEMORY.md) rather than using glob patterns. Do NOT use glob patterns to search — read the index first, then match the user's recipient name against the entries.
-- If a known recipient matches, **read** that memory file to get the full address, then confirm: "Send to [Name] at [Address]?"
+- **List** all files in the skill's local `data/` directory (e.g. `ls data/`) to see saved recipients. Recipient files are named `data/recipient_<firstname_lastname>.md`. Do NOT use glob patterns to search — always list the directory contents first, then match the user's recipient name against the filenames.
+- If a saved recipient matches, **read** that file to get the full address, then confirm: "Send to [Name] at [Address]?"
 - If no saved recipient matches: ask for full name, street address (line1, line2), city, state (2-letter), ZIP.
 - **Always confirm** the recipient name and address before proceeding.
-- After successful send, save new recipients to auto-memory.
+- After successful send, save new recipients to the skill's `data/` directory.
 
 ### 4. Get sender
 
-- **Read** the memory file `mail_sender.md` directly to get the saved sender address. Do NOT use glob patterns — just read the file path.
+- **Read** the skill's local `data/sender.md` directly to get the saved sender address. Do NOT use glob patterns — just read the file path.
 - If found: use it silently (no need to confirm each time).
-- If not found: ask for full sender name, email, and address. Save to auto-memory after successful send.
+- If not found: ask for full sender name, email, and address. Save to the skill's `data/` directory after successful send.
 
 ### 5. Configure options (letters only)
 
@@ -138,31 +138,22 @@ npx awal@latest x402 pay 'https://postalform.com/api/machine/orders/<order_id>' 
 
 Report the current step to the user. No need to poll repeatedly — report the initial status and let the user know they can check again later.
 
-### 9. Save to memory
+### 9. Save addresses
 
-After successful send:
-- Save sender address to `mail_sender.md` if new (with name, email, full address)
-- Save recipient to `mail_recipient_<firstname_lastname>.md` (with name and full address)
+After successful send, save addresses to the skill's `data/` directory (next to `SKILL.md`). This keeps addresses available across all projects and sessions where the skill is installed.
 
-Memory format for sender:
+- Save sender to `data/sender.md` if new (with name, email, full address)
+- Save recipient to `data/recipient_<firstname_lastname>.md` (with name and full address)
+
+Format for `data/sender.md`:
 ```markdown
----
-name: mail-sender-address
-description: Default sender address for PostalForm mail skill
-type: user
----
 Name: [name]
 Email: [email]
 Address: [line1], [line2], [city], [state] [zip]
 ```
 
-Memory format for recipients:
+Format for `data/recipient_<name>.md`:
 ```markdown
----
-name: mail-recipient-[name]
-description: Saved mailing address for [full name]
-type: user
----
 Name: [full name]
 Address: [line1], [line2], [city], [state] [zip]
 ```
