@@ -74,15 +74,15 @@ For **postcards**: PostalForm expects a 2-page PDF (page 1 = artwork, page 2 = m
 
 ### 3. Get recipient
 
-- Check Claude auto-memory for known recipients. Memory entries are saved as `mail_recipient_<name>.md`.
-- If a known recipient matches, confirm: "Send to [Name] at [Address]?"
-- If unknown: ask for full name, street address (line1, line2), city, state (2-letter), ZIP.
+- **List** all memory files matching `mail_recipient_*.md` by reading the memory index (MEMORY.md) rather than using glob patterns. Do NOT use glob patterns to search — read the index first, then match the user's recipient name against the entries.
+- If a known recipient matches, **read** that memory file to get the full address, then confirm: "Send to [Name] at [Address]?"
+- If no saved recipient matches: ask for full name, street address (line1, line2), city, state (2-letter), ZIP.
 - **Always confirm** the recipient name and address before proceeding.
 - After successful send, save new recipients to auto-memory.
 
 ### 4. Get sender
 
-- Check Claude auto-memory for saved sender address (`mail_sender.md`).
+- **Read** the memory file `mail_sender.md` directly to get the saved sender address. Do NOT use glob patterns — just read the file path.
 - If found: use it silently (no need to confirm each time).
 - If not found: ask for full sender name, email, and address. Save to auto-memory after successful send.
 

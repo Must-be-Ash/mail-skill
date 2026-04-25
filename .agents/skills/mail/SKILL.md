@@ -74,15 +74,15 @@ For **postcards**: PostalForm expects a 2-page PDF (page 1 = artwork, page 2 = m
 
 ### 3. Get recipient
 
-- Check the skill's local `data/` directory for saved recipients. Recipient files are saved as `data/recipient_<firstname_lastname>.md`.
-- If a known recipient matches, confirm: "Send to [Name] at [Address]?"
-- If unknown: ask for full name, street address (line1, line2), city, state (2-letter), ZIP.
+- **List** all files in the skill's local `data/` directory (e.g. `ls data/`) to see saved recipients. Recipient files are named `data/recipient_<firstname_lastname>.md`. Do NOT use glob patterns to search — always list the directory contents first, then match the user's recipient name against the filenames.
+- If a saved recipient matches, **read** that file to get the full address, then confirm: "Send to [Name] at [Address]?"
+- If no saved recipient matches: ask for full name, street address (line1, line2), city, state (2-letter), ZIP.
 - **Always confirm** the recipient name and address before proceeding.
 - After successful send, save new recipients to the skill's `data/` directory.
 
 ### 4. Get sender
 
-- Check the skill's local `data/sender.md` for the saved sender address.
+- **Read** the skill's local `data/sender.md` directly to get the saved sender address. Do NOT use glob patterns — just read the file path.
 - If found: use it silently (no need to confirm each time).
 - If not found: ask for full sender name, email, and address. Save to the skill's `data/` directory after successful send.
 
