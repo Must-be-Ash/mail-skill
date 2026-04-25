@@ -14,8 +14,8 @@ description: >-
 Before any mail operation, verify wallet readiness:
 
 ```bash
-npx awal@latest status    # must show authenticated
-npx awal@latest balance   # need ≥ $1 USDC
+npx awal@latest status              # must show authenticated
+npx awal@latest balance --chain base  # need ≥ $1 USDC on Base
 ```
 
 - Not authenticated → run the `authenticate-wallet` skill
