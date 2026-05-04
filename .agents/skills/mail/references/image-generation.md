@@ -1,103 +1,102 @@
 # AI Image Generation for Postcards
 
-Generate postcard artwork via recraft-v3 on fal.ai, paid with USDC on Base via x402.
+Generate postcard artwork via DALL-E 3 using the image generation API.
 
-**Model:** recraft-v3 ($0.04/image)
-**Endpoint:** `https://fal.x402.paysponge.com/fal-ai/recraft-v3`
+**Model:** DALL-E 3
+**Endpoint:** `https://image-generation-api-64k8.onrender.com/v1/image/generate`
 
-## Automatic prompt construction
+## Default style
 
-The user describes what they want in plain language. The agent MUST transform the user's prompt before sending it to the model. This ensures the output is a flat graphic suitable for printing — not a photo of a card.
+When the user describes their postcard idea without specifying a visual style, apply the default doodle aesthetic by appending this suffix to their prompt:
+
+> `, doodle style, hand-drawn, imperfect scratchy lines, whimsical illustration, black ink with light watercolor accents`
+
+This produces charming, imperfect, hand-crafted-feeling artwork that prints beautifully on postcards.
+
+**Apply the default style when** the user's description focuses on subject or message but gives no style cues:
+- "a happy panda holding a sign" → apply default
+- "flowers and butterflies for grandma" → apply default
+- "a cat wearing a birthday hat" → apply default
+- "get well soon with a sloth" → apply default
+
+**Do NOT apply the default style when** the user explicitly describes a visual style:
+- "watercolour colourful hippie style" → respect it, don't override
+- "futuristic sci-fi neon astronaut" → respect it, don't override
+- "photorealistic sunset over the ocean" → respect it, don't override
+- "anime style cute panda" → respect it, don't override
+- "oil painting impressionist flowers" → respect it, don't override
+
+When in doubt, apply the default — most users describe *what* they want, not *how* it should look.
+
+## Prompt construction
+
+The user describes what they want in plain language. The agent transforms the prompt before sending.
 
 ### Rules
 
-1. **Always set** `"style":"digital_illustration"` in the request body
-2. **Always append** this suffix to the user's prompt: `, marker pen lines, imperfect wobbly hand-drawn sketch, flat color fills, imperfect hand-lettered text, simple minimal doodle, rough edges, no fine detail, no shading, no gradients, no textures, white background, flat illustration`
-3. **Never include** these words in the prompt: `card`, `greeting card`, `postcard`, `mockup`, `print`, `paper`, `envelope`, `frame`, `border`, `photograph`, `photo of`. These cause the model to generate an image OF a physical card instead of the artwork itself.
-4. **Always set** `image_size` based on the postcard size (see ratio mapping below)
+1. **Strip postcard/card words** — Never include: `card`, `greeting card`, `postcard`, `mockup`, `print`, `paper`, `envelope`, `frame`, `border`, `photograph`, `photo of`. These cause the model to generate an image OF a physical card instead of the artwork itself.
+2. **Apply default style if no style specified** — Append `, doodle style, hand-drawn, imperfect scratchy lines, whimsical illustration, black ink with light watercolor accents` unless the user already indicated a visual style.
+3. **Preserve the user's intent** — Keep the subject, message text, and any named recipients exactly as described.
 
-### Example transformation
+### Example transformations
 
-User says: "a birthday card with a giraffe saying happy birthday Ash"
+| User says | Style detected? | Agent prompt |
+|-----------|----------------|--------------|
+| "a happy panda holding a sign that says get well soon Dan" | No → use default | `"a happy panda holding a sign that says get well soon Dan, doodle style, hand-drawn, imperfect scratchy lines, whimsical illustration, black ink with light watercolor accents"` |
+| "watercolour colourful hippie style flowers for Sarah" | Yes | `"watercolour colourful hippie style flowers for Sarah"` |
+| "futuristic sci-fi neon astronaut for Jake's birthday saying Happy Birthday Jake" | Yes | `"futuristic sci-fi neon astronaut saying Happy Birthday Jake"` |
+| "thank you with flowers" | No → use default | `"thank you with flowers, doodle style, hand-drawn, imperfect scratchy lines, whimsical illustration, black ink with light watercolor accents"` |
+| "merry christmas with a snowman" | No → use default | `"a cheerful snowman in a snowy scene with text saying Merry Christmas, doodle style, hand-drawn, imperfect scratchy lines, whimsical illustration, black ink with light watercolor accents"` |
 
-Agent constructs:
-```json
-{
-  "prompt": "a cute giraffe with text saying Happy Birthday Ash, marker pen lines, imperfect wobbly hand-drawn sketch, flat color fills, imperfect hand-lettered text, simple minimal doodle, rough edges, no fine detail, no shading, no gradients, no textures, white background, flat illustration",
-  "image_size": {"width": 1800, "height": 1200},
-  "style": "digital_illustration"
-}
-```
+## Postcard size → image size mapping
 
-Notice: "card" was removed, doodle style modifiers were appended, and the user's intent was preserved.
+DALL-E 3 supports fixed sizes. Always use landscape for postcards:
 
-### More examples
+| Postcard size | Image size | Aspect ratio |
+|---------------|-----------|--------------|
+| **4x6** | `1792x1024` | landscape |
+| **6x9** | `1792x1024` | landscape |
+| **11x6** | `1792x1024` | landscape |
 
-| User says | Agent prompt |
-|-----------|-------------|
-| "get well soon card with a panda astronaut for Dan" | "a panda wearing a white astronaut suit waving with hand-lettered text saying GET WELL SOON at top and DAN at bottom, small stars scattered around, marker pen lines, imperfect wobbly hand-drawn sketch, flat color fills, imperfect hand-lettered text, simple minimal doodle, rough edges, no fine detail, no shading, no gradients, no textures, white background, flat illustration" |
-| "thank you with flowers" | "a simple bouquet of flowers with hand-lettered text saying Thank You, marker pen lines, imperfect wobbly hand-drawn sketch, flat color fills, imperfect hand-lettered text, simple minimal doodle, rough edges, no fine detail, no shading, no gradients, no textures, white background, flat illustration" |
-| "merry christmas with a snowman" | "a simple snowman wearing a scarf with hand-lettered text saying Merry Christmas, marker pen lines, imperfect wobbly hand-drawn sketch, flat color fills, imperfect hand-lettered text, simple minimal doodle, rough edges, no fine detail, no shading, no gradients, no textures, white background, flat illustration" |
-
-## Postcard size → image ratio mapping
-
-Always auto-select the correct dimensions based on the chosen postcard size:
-
-| Postcard size | Image dimensions | Aspect ratio |
-|---------------|-----------------|--------------|
-| **4x6** | `{"width": 1800, "height": 1200}` | 3:2 landscape |
-| **6x9** | `{"width": 1800, "height": 1200}` | 3:2 landscape |
-| **11x6** | `{"width": 2200, "height": 1200}` | 11:6 landscape |
-
-The user never needs to specify ratio or dimensions — the skill maps it automatically from the postcard size.
+The user never needs to specify dimensions — the skill maps it automatically from the postcard size.
 
 ## Full flow
 
-### Step 1: Generate image via x402
+### Step 1: Generate image
 
 ```bash
-npx awal@latest x402 pay 'https://fal.x402.paysponge.com/fal-ai/recraft-v3' \
-  -X POST \
-  -d '{"prompt":"<constructed prompt>","image_size":{"width":1800,"height":1200},"style":"digital_illustration"}' \
-  --json
+curl -s -X POST "https://image-generation-api-64k8.onrender.com/v1/image/generate" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"<constructed prompt>","size":"1792x1024"}'
 ```
 
-### Step 2: Poll for result
+Response is synchronous — no polling needed:
 
-The response contains a `response_url`. Poll with curl (free, no payment):
-
-```bash
-curl -s '<response_url>'
-```
-
-Result includes an `images` array:
 ```json
 {
-  "images": [{"url": "https://v3b.fal.media/files/...", "content_type": "image/webp"}]
+  "provider": "openai",
+  "model": "dall-e-3",
+  "images": [{"url": "https://...", "b64_json": null}],
+  "request_id": "..."
 }
 ```
 
-If response shows `"status": "IN_QUEUE"` or `"IN_PROGRESS"`, wait 3 seconds and poll again. Typical generation time: ~5-8 seconds.
+Extract `images[0].url` immediately.
 
-### Step 3: Download and preview
+### Step 2: Download and preview
 
 ```bash
-curl -sL '<image_url>' -o /tmp/postcard-artwork.webp
+curl -sL '<image_url>' -o /tmp/postcard-artwork.png
 ```
 
-**Always do both of the following before proceeding:**
-1. Run `open /tmp/postcard-artwork.webp` to launch the image in the user's default viewer
-2. Read the downloaded file so the user can also see it inline in the conversation
-
-Then ask:
+**Always show the image to the user before proceeding.** Read the downloaded file so the user can see it inline in the conversation, then ask:
 
 > *"Here's the generated artwork. Want to use this for your postcard, or would you like me to generate a new one?"*
 
-- If the user approves → continue to Step 4
-- If the user wants changes → go back to Step 1 with an adjusted prompt (costs another $0.04)
-- The user can iterate as many times as they want before committing
+- If the user approves → continue to Step 3
+- If the user wants changes → go back to Step 1 with an adjusted prompt
 
-### Step 4: Convert to 2-page postcard PDF
+### Step 3: Convert to 2-page postcard PDF
 
 PostalForm postcards require a 2-page PDF: page 1 = artwork, page 2 = mailing side (blank — PostalForm fills it).
 
@@ -119,10 +118,10 @@ img_resized.save(sys.argv[3], "PDF", save_all=True, append_images=[blank])
 
 Run:
 ```bash
-python3 /tmp/postcard_pdf.py /tmp/postcard-artwork.webp 6x9 /tmp/postcard.pdf
+python3 /tmp/postcard_pdf.py /tmp/postcard-artwork.png 6x9 /tmp/postcard.pdf
 ```
 
-### Step 5: Base64-encode and pass to PostalForm
+### Step 4: Base64-encode and pass to PostalForm
 
 ```bash
 base64 -i /tmp/postcard.pdf
@@ -135,4 +134,4 @@ Use in the PostalForm payload:
 
 ## Cost
 
-$0.04 USDC per image generation, in addition to PostalForm mailing cost.
+Image generation is free at this endpoint (no x402 payment required). PostalForm mailing cost is ~$1–3 USDC, paid via x402.
