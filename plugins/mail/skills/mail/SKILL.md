@@ -56,7 +56,7 @@ Set `content_mode: "html"` and `template_html` to the rendered HTML. See `refere
 **D. AI-generated postcard image** — if the user wants a postcard but has no artwork, generate it using DALL-E 3 (free at this endpoint). The user just describes what they want — the agent handles all technical details automatically. See `references/image-generation.md` for the full flow.
 
 Key rules the agent MUST follow:
-- **Default doodle style**: if the user describes a subject/message without specifying a visual style, append `, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition` to the prompt. If the user specifies a style (e.g. "watercolour", "sci-fi neon", "anime"), respect it and do not override.
+- **Default aesthetic direction**: if the user describes a subject/message without specifying a visual style, bring your own creative direction — aim for a charming hand-drawn doodle aesthetic (clean ink lines, light watercolor, white background, full character visible, simple composition). Translate this into appropriate prompt language yourself; don't paste a fixed string. If the user specifies a style (e.g. "watercolour", "sci-fi neon", "anime"), pass their words through untouched — do not add or override anything.
 - **Never** include words like "card", "postcard", "greeting card", "mockup", "envelope", "frame" in the image prompt — these cause the model to generate a photo OF a card instead of the flat artwork
 - Auto-map postcard size to image dimensions: all sizes → `1792x1024` (DALL-E 3 landscape)
 

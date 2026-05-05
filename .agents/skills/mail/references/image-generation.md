@@ -5,30 +5,26 @@ Generate postcard artwork via DALL-E 3 using the image generation API.
 **Model:** DALL-E 3
 **Endpoint:** `https://image-generation-api-64k8.onrender.com/v1/image/generate`
 
-## Default style
+## Default aesthetic (when user gives no style direction)
 
-When the user describes their postcard idea without specifying a visual style, apply the default doodle aesthetic by appending this suffix to their prompt:
+When the user describes their postcard idea without specifying a visual style, bring your own creative direction to the prompt. The target aesthetic is:
 
-> `, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition`
+**Charming hand-drawn doodle** — clean simple ink lines, light watercolor accents, white background, full character visible, cute and simple composition. Think: a character holding a sign, drawn like a friendly sketch in a notebook. Not heavily rendered, not dark or scratchy, not photo-realistic.
 
-This produces clean, charming, hand-crafted-feeling artwork that prints beautifully on postcards. Key words explained:
-- **simple clean ink lines** — prevents heavy dark scratchy scribbles; keeps it light and readable
-- **white background** — forces a clean uncluttered result
-- **full character visible** — prevents DALL-E 3 from zooming into a face close-up
-- **simple composition** — keeps the scene uncluttered and postcard-appropriate
+This is a **creative direction**, not a string to paste. Use your judgment to express this aesthetic in the prompt in whatever way best fits the subject. The goal is output that looks like it was hand-sketched with care — clean, warm, and print-friendly.
 
-**Apply the default style when** the user's description focuses on subject or message but gives no style cues:
-- "a happy panda holding a sign" → apply default
-- "flowers and butterflies for grandma" → apply default
-- "a cat wearing a birthday hat" → apply default
-- "get well soon with a sloth" → apply default
+**Apply this aesthetic when** the user's description focuses on subject or message but gives no style cues:
+- "a happy panda holding a sign" → you provide the aesthetic direction
+- "flowers and butterflies for grandma" → you provide the aesthetic direction
+- "a cat wearing a birthday hat" → you provide the aesthetic direction
+- "get well soon with a sloth" → you provide the aesthetic direction
 
-**Do NOT apply the default style when** the user explicitly describes a visual style:
-- "watercolour colourful hippie style" → respect it, don't override
-- "futuristic sci-fi neon astronaut" → respect it, don't override
-- "photorealistic sunset over the ocean" → respect it, don't override
-- "anime style cute panda" → respect it, don't override
-- "oil painting impressionist flowers" → respect it, don't override
+**Do NOT apply this aesthetic when** the user explicitly describes a visual style — use their style as-is, untouched:
+- "watercolour colourful hippie style" → their words, their style
+- "futuristic sci-fi neon astronaut" → their words, their style
+- "photorealistic sunset over the ocean" → their words, their style
+- "anime style cute panda" → their words, their style
+- "oil painting impressionist flowers" → their words, their style
 
 When in doubt, apply the default — most users describe *what* they want, not *how* it should look.
 
@@ -39,19 +35,19 @@ The user describes what they want in plain language. The agent transforms the pr
 ### Rules
 
 1. **Strip postcard/card words** — Never include: `card`, `greeting card`, `postcard`, `mockup`, `print`, `paper`, `envelope`, `frame`, `border`, `photograph`, `photo of`. These cause the model to generate an image OF a physical card instead of the artwork itself.
-2. **Apply default style if no style specified** — Append `, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition` unless the user already indicated a visual style.
-3. **Preserve the user's words exactly** — Do not add creative flourishes, extra elements, or descriptors the user didn't mention. If the user said "a happy panda holding a sign that says get well soon Dan", the subject in the prompt should be exactly that — not "a cheerful happy panda surrounded by balloons and flowers holding a colorful banner". The user's words are the prompt; the style suffix does the visual steering.
-4. **Use "sign" not "banner"** — When the user wants text on something the character is holding, always use "sign" in the prompt. "Banner" causes DALL-E 3 to generate a ribbon/streamer composition instead of a handheld sign.
+2. **If no style given, add aesthetic direction** — Translate the default doodle aesthetic above into appropriate prompt language for the subject. Don't mechanically paste a fixed string — craft style language that fits.
+3. **Preserve the user's words exactly for the subject** — Do not add creative flourishes, extra elements, or descriptors the user didn't mention. If the user said "a happy panda holding a sign that says get well soon Dan", the subject stays exactly that. The style language does the visual steering, not the subject.
+4. **Use "sign" not "banner"** — When the user wants text on something the character is holding, always use "sign". "Banner" causes DALL-E 3 to generate a ribbon/streamer composition instead of a handheld sign.
 
 ### Example transformations
 
-| User says | Style detected? | Agent prompt |
-|-----------|----------------|--------------|
-| "a happy panda holding a sign that says get well soon Dan" | No → use default | `"a happy panda holding a sign that says get well soon Dan, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition"` |
-| "watercolour colourful hippie style flowers for Sarah" | Yes | `"watercolour colourful hippie style flowers for Sarah"` |
-| "futuristic sci-fi neon astronaut for Jake's birthday saying Happy Birthday Jake" | Yes | `"futuristic sci-fi neon astronaut saying Happy Birthday Jake"` |
-| "thank you with flowers" | No → use default | `"thank you with flowers, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition"` |
-| "merry christmas with a snowman" | No → use default | `"merry christmas with a snowman, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition"` |
+| User says | Style detected? | Agent prompt (example — exact wording is yours to craft) |
+|-----------|----------------|----------------------------------------------------------|
+| "a happy panda holding a sign that says get well soon Dan" | No → add aesthetic direction | `"a happy panda holding a sign that says get well soon Dan, hand-drawn doodle style, clean simple ink lines, light watercolor accents, white background, full character visible, cute and charming"` |
+| "watercolour colourful hippie style flowers for Sarah" | Yes → pass through untouched | `"watercolour colourful hippie style flowers for Sarah"` |
+| "futuristic sci-fi neon astronaut for Jake's birthday saying Happy Birthday Jake" | Yes → pass through untouched | `"futuristic sci-fi neon astronaut for Jake's birthday saying Happy Birthday Jake"` |
+| "thank you with flowers" | No → add aesthetic direction | `"thank you with flowers, hand-drawn doodle style, clean simple ink lines, light watercolor accents, white background, cute and charming"` |
+| "merry christmas with a snowman" | No → add aesthetic direction | `"merry christmas with a snowman, hand-drawn doodle style, clean simple ink lines, light watercolor accents, white background, full character visible"` |
 
 ## Postcard size → image size mapping
 
