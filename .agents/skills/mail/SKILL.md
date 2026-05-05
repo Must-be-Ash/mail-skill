@@ -64,7 +64,7 @@ Flow:
 1. Transform user's prompt (strip card-related words, apply default style if no style specified)
 2. Generate via `curl -s -X POST "https://image-generation-api-64k8.onrender.com/v1/image/generate" -H "Content-Type: application/json" -d '<json>'`
 3. Extract `images[0].url` from the synchronous response (no polling needed)
-4. Download image to `/tmp/postcard-artwork.png` immediately — then **read the file with the Read tool** so it appears inline in the conversation. Do not wait for the user to ask. Do not just share the URL.
+4. Download image to `~/Downloads/postcard-artwork.png` immediately — then **read the file with the Read tool** so it appears inline in the conversation. Do not wait for the user to ask. Do not just share the URL.
 5. Ask the user to confirm: *"Here's the generated artwork. Want to use this for your postcard, or would you like me to generate a new one?"*
 6. If the user wants a new image → go back to step 1
 7. Once approved → convert to 2-page postcard PDF (Python + Pillow), base64-encode, pass to PostalForm

@@ -93,10 +93,10 @@ Run both of these in sequence without any user prompt:
 
 ```bash
 # 1. Download the image
-curl -sL '<image_url>' -o /tmp/postcard-artwork.png
+curl -sL '<image_url>' -o ~/Downloads/postcard-artwork.png
 ```
 
-Then immediately read `/tmp/postcard-artwork.png` using the Read tool so the image appears inline in the conversation. Do not just share the URL — the user cannot see temporary cloud URLs. The inline display is the only way they see the image.
+Then immediately read `~/Downloads/postcard-artwork.png` using the Read tool so the image appears inline in the conversation. Do not just share the URL — the user cannot see temporary cloud URLs. The inline display is the only way they see the image.
 
 After showing it, ask:
 
@@ -127,7 +127,7 @@ img_resized.save(sys.argv[3], "PDF", save_all=True, append_images=[blank])
 
 Run:
 ```bash
-python3 /tmp/postcard_pdf.py /tmp/postcard-artwork.png 6x9 /tmp/postcard.pdf
+python3 /tmp/postcard_pdf.py ~/Downloads/postcard-artwork.png 6x9 /tmp/postcard.pdf
 ```
 
 ### Step 4: Base64-encode and pass to PostalForm
