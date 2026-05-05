@@ -39,8 +39,9 @@ The user describes what they want in plain language. The agent transforms the pr
 ### Rules
 
 1. **Strip postcard/card words** — Never include: `card`, `greeting card`, `postcard`, `mockup`, `print`, `paper`, `envelope`, `frame`, `border`, `photograph`, `photo of`. These cause the model to generate an image OF a physical card instead of the artwork itself.
-2. **Apply default style if no style specified** — Append `, doodle style, hand-drawn, imperfect scratchy lines, whimsical illustration, black ink with light watercolor accents` unless the user already indicated a visual style.
-3. **Preserve the user's intent** — Keep the subject, message text, and any named recipients exactly as described.
+2. **Apply default style if no style specified** — Append `, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition` unless the user already indicated a visual style.
+3. **Preserve the user's words exactly** — Do not add creative flourishes, extra elements, or descriptors the user didn't mention. If the user said "a happy panda holding a sign that says get well soon Dan", the subject in the prompt should be exactly that — not "a cheerful happy panda surrounded by balloons and flowers holding a colorful banner". The user's words are the prompt; the style suffix does the visual steering.
+4. **Use "sign" not "banner"** — When the user wants text on something the character is holding, always use "sign" in the prompt. "Banner" causes DALL-E 3 to generate a ribbon/streamer composition instead of a handheld sign.
 
 ### Example transformations
 
@@ -50,7 +51,7 @@ The user describes what they want in plain language. The agent transforms the pr
 | "watercolour colourful hippie style flowers for Sarah" | Yes | `"watercolour colourful hippie style flowers for Sarah"` |
 | "futuristic sci-fi neon astronaut for Jake's birthday saying Happy Birthday Jake" | Yes | `"futuristic sci-fi neon astronaut saying Happy Birthday Jake"` |
 | "thank you with flowers" | No → use default | `"thank you with flowers, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition"` |
-| "merry christmas with a snowman" | No → use default | `"a cheerful snowman in a snowy scene with text saying Merry Christmas, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition"` |
+| "merry christmas with a snowman" | No → use default | `"merry christmas with a snowman, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition"` |
 
 ## Postcard size → image size mapping
 
