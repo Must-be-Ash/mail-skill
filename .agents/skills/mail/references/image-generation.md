@@ -38,12 +38,13 @@ The user describes what they want in plain language. The agent transforms the pr
 2. **If no style given, add aesthetic direction** — Translate the default doodle aesthetic above into appropriate prompt language for the subject. Don't mechanically paste a fixed string — craft style language that fits.
 3. **Preserve the user's words exactly for the subject** — Do not add creative flourishes, extra elements, or descriptors the user didn't mention. If the user said "a happy panda holding a sign that says get well soon Dan", the subject stays exactly that. The style language does the visual steering, not the subject.
 4. **Use "sign" not "banner"** — When the user wants text on something the character is holding, always use "sign". "Banner" causes DALL-E 3 to generate a ribbon/streamer composition instead of a handheld sign.
+5. **Quote sign text explicitly and completely** — DALL-E 3 frequently truncates text, especially names at the end of a phrase. When text needs to appear in the image (e.g. on a sign), quote it explicitly in the prompt: `holding a sign with the text "GET WELL SOON DAN" written clearly and completely`. Never describe it as just "saying get well soon Dan" — the explicit quoting and "written clearly and completely" phrasing significantly improves text fidelity.
 
 ### Example transformations
 
 | User says | Style detected? | Agent prompt (example — exact wording is yours to craft) |
 |-----------|----------------|----------------------------------------------------------|
-| "a happy panda holding a sign that says get well soon Dan" | No → add aesthetic direction | `"a happy panda holding a sign that says get well soon Dan, hand-drawn doodle style, clean simple ink lines, light watercolor accents, white background, full character visible, cute and charming"` |
+| "a happy panda holding a sign that says get well soon Dan" | No → add aesthetic direction | `"a happy panda holding a sign with the text 'GET WELL SOON DAN' written clearly and completely, hand-drawn doodle style, clean simple ink lines, light watercolor accents, white background, full character visible, cute and charming"` |
 | "watercolour colourful hippie style flowers for Sarah" | Yes → pass through untouched | `"watercolour colourful hippie style flowers for Sarah"` |
 | "futuristic sci-fi neon astronaut for Jake's birthday saying Happy Birthday Jake" | Yes → pass through untouched | `"futuristic sci-fi neon astronaut for Jake's birthday saying Happy Birthday Jake"` |
 | "thank you with flowers" | No → add aesthetic direction | `"thank you with flowers, hand-drawn doodle style, clean simple ink lines, light watercolor accents, white background, cute and charming"` |
