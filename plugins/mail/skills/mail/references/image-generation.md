@@ -87,13 +87,20 @@ Extract `images[0].url` immediately.
 
 ### Step 2: Download and preview
 
+**This step is MANDATORY and must happen immediately after extracting the URL — do not skip it, do not wait for the user to ask.**
+
+Run both of these in sequence without any user prompt:
+
 ```bash
+# 1. Download the image
 curl -sL '<image_url>' -o /tmp/postcard-artwork.png
 ```
 
-**Always show the image to the user before proceeding.** Read the downloaded file so the user can see it inline in the conversation, then ask:
+Then immediately read `/tmp/postcard-artwork.png` using the Read tool so the image appears inline in the conversation. Do not just share the URL — the user cannot see temporary cloud URLs. The inline display is the only way they see the image.
 
-> *"Here's the generated artwork. Want to use this for your postcard, or would you like me to generate a new one?"*
+After showing it, ask:
+
+> *"Here's the generated artwork. Want to use this for your postcard, or would you like me to regenerate?"*
 
 - If the user approves → continue to Step 3
 - If the user wants changes → go back to Step 1 with an adjusted prompt
