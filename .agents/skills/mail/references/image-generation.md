@@ -9,9 +9,13 @@ Generate postcard artwork via DALL-E 3 using the image generation API.
 
 When the user describes their postcard idea without specifying a visual style, apply the default doodle aesthetic by appending this suffix to their prompt:
 
-> `, doodle style, hand-drawn, imperfect scratchy lines, whimsical illustration, black ink with light watercolor accents`
+> `, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition`
 
-This produces charming, imperfect, hand-crafted-feeling artwork that prints beautifully on postcards.
+This produces clean, charming, hand-crafted-feeling artwork that prints beautifully on postcards. Key words explained:
+- **simple clean ink lines** — prevents heavy dark scratchy scribbles; keeps it light and readable
+- **white background** — forces a clean uncluttered result
+- **full character visible** — prevents DALL-E 3 from zooming into a face close-up
+- **simple composition** — keeps the scene uncluttered and postcard-appropriate
 
 **Apply the default style when** the user's description focuses on subject or message but gives no style cues:
 - "a happy panda holding a sign" → apply default
@@ -42,11 +46,11 @@ The user describes what they want in plain language. The agent transforms the pr
 
 | User says | Style detected? | Agent prompt |
 |-----------|----------------|--------------|
-| "a happy panda holding a sign that says get well soon Dan" | No → use default | `"a happy panda holding a sign that says get well soon Dan, doodle style, hand-drawn, imperfect scratchy lines, whimsical illustration, black ink with light watercolor accents"` |
+| "a happy panda holding a sign that says get well soon Dan" | No → use default | `"a happy panda holding a sign that says get well soon Dan, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition"` |
 | "watercolour colourful hippie style flowers for Sarah" | Yes | `"watercolour colourful hippie style flowers for Sarah"` |
 | "futuristic sci-fi neon astronaut for Jake's birthday saying Happy Birthday Jake" | Yes | `"futuristic sci-fi neon astronaut saying Happy Birthday Jake"` |
-| "thank you with flowers" | No → use default | `"thank you with flowers, doodle style, hand-drawn, imperfect scratchy lines, whimsical illustration, black ink with light watercolor accents"` |
-| "merry christmas with a snowman" | No → use default | `"a cheerful snowman in a snowy scene with text saying Merry Christmas, doodle style, hand-drawn, imperfect scratchy lines, whimsical illustration, black ink with light watercolor accents"` |
+| "thank you with flowers" | No → use default | `"thank you with flowers, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition"` |
+| "merry christmas with a snowman" | No → use default | `"a cheerful snowman in a snowy scene with text saying Merry Christmas, doodle style, hand-drawn, simple clean ink lines, whimsical illustration, light watercolor accents, white background, full character visible, cute and charming, simple composition"` |
 
 ## Postcard size → image size mapping
 
