@@ -5,8 +5,8 @@ description: >-
   USDC payments on Base from the awal agent wallet. Use when the user asks to
   send mail, post a letter, mail a document, send a postcard, mail a PDF, send
   physical mail, or "mail it to [someone]". Supports user-provided PDFs,
-  auto-generation from text, and AI image generation for postcards via DALL-E 3.
-  Recipient must be in the US. Single recipient per send.
+  auto-generation from text, and AI image generation for postcards via recraft-v3
+  on fal.ai (paid with x402). Recipient must be in the US. Single recipient per send.
 ---
 
 ## Prerequisites
@@ -53,20 +53,22 @@ Four content modes:
 
 Set `content_mode: "html"` and `template_html` to the rendered HTML. See `references/postalform-api.md` § Bulk (text auto-generation).
 
-**D. AI-generated postcard image** — if the user wants a postcard but has no artwork, generate it using DALL-E 3 (free at this endpoint). The user just describes what they want — the agent handles all technical details automatically. See `references/image-generation.md` for the full flow.
+**D. AI-generated postcard image** — if the user wants a postcard but has no artwork, generate it using recraft-v3 via fal.ai ($0.04/image). The user just describes what they want — the agent handles all technical details automatically. See `references/image-generation.md` for the full flow.
 
 Key rules the agent MUST follow:
 - **Default aesthetic direction**: if the user describes a subject/message without specifying a visual style, bring your own creative direction — aim for a charming hand-drawn doodle aesthetic (clean ink lines, light watercolor, white background, full character visible, simple composition). Translate this into appropriate prompt language yourself; don't paste a fixed string. If the user specifies a style (e.g. "watercolour", "sci-fi neon", "anime"), pass their words through untouched — do not add or override anything.
 - **Never** include words like "card", "postcard", "greeting card", "mockup", "envelope", "frame" in the image prompt — these cause the model to generate a photo OF a card instead of the flat artwork
-- Auto-map postcard size to image dimensions: all sizes → `1792x1024` (DALL-E 3 landscape)
+- **Quote sign text explicitly**: use `holding a sign with the text "X" written clearly and completely` to ensure names and phrases render fully
+- Always set `"style": "digital_illustration"` in the request body
+- Auto-map postcard size to image dimensions: 4x6/6x9 → `1800x1200`, 11x6 → `2200x1200`
 
 Flow:
-1. Transform user's prompt (strip card-related words, apply default style if no style specified)
-2. Generate via `curl -s -X POST "https://image-generation-api-64k8.onrender.com/v1/image/generate" -H "Content-Type: application/json" -d '<json>'`
-3. Extract `images[0].url` from the synchronous response (no polling needed)
-4. Download image to `~/Downloads/postcard-artwork.png` immediately — then **read the file with the Read tool** so it appears inline in the conversation. Do not wait for the user to ask. Do not just share the URL.
+1. Transform user's prompt (strip card-related words, apply default aesthetic if no style specified)
+2. Generate via `npx awal@latest x402 pay 'https://fal.x402.paysponge.com/fal-ai/recraft-v3' -X POST -d '<json>' --json`
+3. Wait ~6 seconds, then poll via `npx awal@latest x402 pay 'https://fal.x402.paysponge.com/fal-ai/recraft-v3/requests/<request_id>' -X GET --json` (free — amount is 0). Repeat every 3s if still IN_QUEUE.
+4. Download image to `~/Downloads/postcard-artwork.webp` immediately — then **read the file with the Read tool** so it appears inline in the conversation. Do not wait for the user to ask. Do not just share the URL.
 5. Ask the user to confirm: *"Here's the generated artwork. Want to use this for your postcard, or would you like me to generate a new one?"*
-6. If the user wants a new image → go back to step 1
+6. If the user wants a new image → go back to step 1 (costs another $0.04)
 7. Once approved → convert to 2-page postcard PDF (Python + Pillow), base64-encode, pass to PostalForm
 
 For **postcards**: PostalForm expects a 2-page PDF (page 1 = artwork, page 2 = mailing side). PostalForm fills addresses/indicia automatically — do NOT include addresses in the PDF.
@@ -175,12 +177,14 @@ Rules:
 - Output starts with a status line, then JSON — parse from first `{`
 - Generate a fresh UUID v4 for each `request_id`
 
-Image generation uses plain `curl` (no x402 payment required — free endpoint):
+Image generation uses x402 via awal for both steps:
 
 ```bash
-curl -s -X POST "https://image-generation-api-64k8.onrender.com/v1/image/generate" \
-  -H "Content-Type: application/json" \
-  -d '<json-body>'
+# Step 1: Generate (costs $0.04 USDC)
+npx awal@latest x402 pay 'https://fal.x402.paysponge.com/fal-ai/recraft-v3' -X POST -d '<json>' --json
+
+# Step 2: Poll for result (free — amount is 0)
+npx awal@latest x402 pay 'https://fal.x402.paysponge.com/fal-ai/recraft-v3/requests/<request_id>' -X GET --json
 ```
 
 ## Constraints
